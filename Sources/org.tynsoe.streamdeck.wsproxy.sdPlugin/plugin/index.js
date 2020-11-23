@@ -34,6 +34,11 @@ function connect(coordinates,remoteServer,message) {
 			websocket.send(JSON.stringify(j))
 		}
 	}
+	c.onclose = function() {
+		if (connections.hasOwnProperty(key)) {
+			connect(coordinates,remoteServer,null)
+		}
+	}
 }
 
 function disconnect(coordinates,message) {
@@ -46,6 +51,7 @@ function disconnect(coordinates,message) {
 		if (c.readyState == 1) {
 			c.send(JSON.stringify(message))
 		}
+		connections.delete(key)
 		c.close()
 	}
 }
