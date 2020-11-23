@@ -17,3 +17,7 @@ Simply put the address of the remote server as `ws://remote_server`
 `id` can be used to identify each button. It can be found in the `settings` object of the payload to the remote server.
 
 Do not set something in "Title" unless you don't want to be able to change it through the remote server
+
+## Node-RED
+
+TODO : add samples of configuration with Node-RED websocket node
