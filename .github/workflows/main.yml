@@ -38,10 +38,10 @@ jobs:
         
       - name: Get changelog
         run: |
-          changelog=`sed -n -E "/$tag/,/^\$/{/^#/{d;}; p;}" CHANGELOG.md`
+          changelog=`sed -n -E "/v${{ steps.get-version.outputs.VERSION }}/,/^\$/{/^#/{d;}; p;}" CHANGELOG.md`
           echo "::set-output name=CHANGELOG::$changelog"
         id: changelog
-        
+
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
