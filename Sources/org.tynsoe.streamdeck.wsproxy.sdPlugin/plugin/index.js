@@ -1,21 +1,35 @@
 var websocket = null;  // Websocket to Streamdeck
 var connections = {};  // Dictionary maintaining connections for each key
-
-function connect(coordinates,remoteServer,message) {
-	row=coordinates.row;
-	column=coordinates.column;
-
-	key=row + "-" + column;
-
+function addPositionForServer(server,position) {
+	index=connections[server].positions.indexOf(position)
+	if (index == -1) {
+		connections[server].positions.push(position)
+	}
+}
+function removePositionForServer(server,position) {
+	index=connections[server].positions.indexOf(position)
+	if (index != -1) {
+		connections[server].positions.splice(index,1)
+	}
+}
+function positionFromCoordinates(c) {
+	return c.column + "-" + c.row
+}
+function connect(remoteServer,position,message,backend_only=false) {
 	// Close connection if it already exists
-	if (connections.hasOwnProperty(key)) {
-		c=connections[key];
-		c.close()
+	if (connections.hasOwnProperty(remoteServer) && (backend_only == false)) {
+		addPositionForServer(remoteServer,position)
+		return
 	}
 
 	// Create a new connection to the remote websocket
 	c = new WebSocket(remoteServer)
-	connections[key]=c
+	if (backend_only) {
+		connections[remoteServer].websocket=c
+	}
+	else {
+		connections[remoteServer] = {positions: [position],websocket: c}
+	}
 
 	// send willAppear message when connection is ready
 	c.onopen = function(evt) {
@@ -36,23 +50,24 @@ function connect(coordinates,remoteServer,message) {
 	}
 	c.onclose = function() {
 		if (connections.hasOwnProperty(key)) {
-			connect(coordinates,remoteServer,null)
+			connect(remoteServer,null,null,true)
 		}
 	}
 }
 
-function disconnect(coordinates,message) {
-	row=coordinates.row;
-	column=coordinates.column;
-	key=row + "-" + column;
+function disconnect(remoteServer,position,message) {
 
-	if (connections.hasOwnProperty(key)) {
-		c=connections[key];
+	if (connections.hasOwnProperty(remoteServer)) {
+		c=connections[remoteServer].websocket;
 		if (c.readyState == 1) {
 			c.send(JSON.stringify(message))
 		}
-		delete connections[key]
-		c.close()
+		removePositionForServer(remoteServer,position)
+		if (connections[remoteServer].positions.length == 0) {
+			delete connections[remoteServer]
+			c.onclose=null
+			c.close()
+		}
 	}
 }
 function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
@@ -82,8 +97,6 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 		console.log(evt)
 		var jsonObj = JSON.parse(evt.data);
 		var event = jsonObj['event'];
-		var action = jsonObj['action'];
-		var context = jsonObj['context'];
 	
 		if(event == "didReceiveSettings")
 		{
@@ -91,7 +104,7 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 			var settings = jsonPayload['settings'];
 			var coordinates = jsonPayload['coordinates'];
 
-			connect(coordinates,settings.remoteServer,null)
+			connect(settings.remoteServer,positionFromCoordinates(coordinates))
 		}
 		else if(event == "willAppear")
 		{
@@ -99,7 +112,7 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 			var settings = jsonPayload['settings'];
 			var coordinates = jsonPayload['coordinates'];
 			if (settings.hasOwnProperty("remoteServer")) {
-				connect(coordinates,settings.remoteServer,jsonObj)
+				connect(settings.remoteServer,positionFromCoordinates(coordinates),jsonObj)
 			}
 		}
 		else if(event == "willDisappear")
@@ -108,16 +121,18 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 			var settings = jsonPayload['settings'];
 			var coordinates = jsonPayload['coordinates'];
 
-			disconnect(coordinates,jsonObj)
+			disconnect(settings.remoteServer,positionFromCoordinates(coordinates),jsonObj)
 		}
 		// If there is a key associated with the message, forward to remote websocket
 		else if (jsonObj.hasOwnProperty("payload")) {
-			if (jsonObj['payload'].hasOwnProperty("coordinates")) {
-				key = jsonObj['payload']['coordinates']['row'] + "-" + jsonObj['payload']['coordinates']['column']
-				c=connections[key]
-				if (c && c.readyState == 1) {
-					console.log(jsonObj)
-					c.send(JSON.stringify(jsonObj))
+			if (jsonObj['payload'].hasOwnProperty("settings")) {
+				key = jsonObj['payload']['settings']['remoteServer']
+				if (connections.hasOwnProperty(key)) {
+					c=connections[key].websocket
+					if (c && c.readyState == 1) {
+						console.log(jsonObj)
+						c.send(JSON.stringify(jsonObj))
+					}
 				}
 			}
 		}		
