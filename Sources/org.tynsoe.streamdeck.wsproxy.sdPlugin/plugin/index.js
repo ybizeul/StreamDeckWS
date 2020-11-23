@@ -27,9 +27,10 @@ function connect(coordinates,remoteServer,message) {
 
 	// Forward to StreamDeck incoming messages
 	c.onmessage = function(evt) {
-		console.log(evt)
 		j=JSON.parse(evt.data)
+		console.log("Forwarding message")
 		if (websocket && websocket.readyState) {
+			console.log(evt)
 			websocket.send(JSON.stringify(j))
 		}
 	}
