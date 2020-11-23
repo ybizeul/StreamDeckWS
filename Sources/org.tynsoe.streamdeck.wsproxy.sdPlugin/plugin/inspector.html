@@ -11,7 +11,11 @@
     <div class="sdpi-wrapper">
         <div class="sdpi-item">
             <div class="sdpi-item-label">WebSocket</div>
-            <input class="sdpi-item-value" id="remoteServer" value="" onchange="saveServer(event.target.value)">
+            <input class="sdpi-item-value" id="remoteServer" value="" onchange="saveConfiguration()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">id</div>
+            <input class="sdpi-item-value" id="id" value="" onchange="saveConfiguration()">
         </div>
     <div>
 </body>

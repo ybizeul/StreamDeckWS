@@ -26,11 +26,15 @@ function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegist
             if (settings.hasOwnProperty("remoteServer")) {
                 document.getElementById("remoteServer").value=settings.remoteServer
             }
+            if (settings.hasOwnProperty("id")) {
+                document.getElementById("id").value=settings.id
+            }
         }
     }
 }
-function saveServer(s) {
-    saveSettings(uuid,{"remoteServer":s})
+function saveConfiguration() {
+    s={"remoteServer":document.getElementById("remoteServer").value,"id":document.getElementById("id").value}
+    saveSettings(uuid,s)
 }
 function sendValueToPlugin(value, param) {
  
