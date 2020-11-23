@@ -33,7 +33,7 @@ jobs:
       - name: Pack plugin
         uses: actions/upload-artifact@v2
         with:
-          name: org.tynsoe.streamdeck.wsproxy.streamDeckPlugin
+          name: Stream Deck WS
           path: |
             org.tynsoe.streamdeck.wsproxy.streamDeckPlugin
             README.md
