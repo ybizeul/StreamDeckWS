@@ -32,7 +32,7 @@ jobs:
       
       - name: Get Version
         run: |
-          version=`jq -r .Version org.tynsoe.streamdeck.wsproxy.sdPlugin/manifest.json`
+          version=`jq -r .Version Sources/org.tynsoe.streamdeck.wsproxy.sdPlugin/manifest.json`
           echo '::set-output name=VERSION::$version'
         id: get-version
         
