@@ -17,7 +17,7 @@
     "Name": "WebSocket Proxy",
     "Icon": "images/websocket",
     "SDKVersion": 2,
-    "Version": "1.1.2",
+    "Version": "1.1.3",
     "PropertyInspectorPath": "plugin/inspector.html",
     "OS": [
         {

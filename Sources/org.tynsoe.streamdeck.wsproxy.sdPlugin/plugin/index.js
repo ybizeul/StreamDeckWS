@@ -1,5 +1,6 @@
 var websocket = null;  // Websocket to Streamdeck
 var connections = {};  // Dictionary maintaining connections for each key
+
 function addPositionForServer(server,position) {
 	index=connections[server].positions.indexOf(position)
 	if (index == -1) {
@@ -19,6 +20,14 @@ function connect(remoteServer,position,message,backend_only=false) {
 	// Close connection if it already exists
 	if (connections.hasOwnProperty(remoteServer) && (backend_only == false)) {
 		addPositionForServer(remoteServer,position)
+		if (connections[remoteServer].websocket.readyState == 0) {
+			setTimeout(() => {
+				connections[remoteServer].websocket.send(JSON.stringify(message))
+			},1000)
+		}
+		else {
+			connections[remoteServer].websocket.send(JSON.stringify(message))
+		}
 		return
 	}
 
