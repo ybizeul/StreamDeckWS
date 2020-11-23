@@ -1,0 +1,35 @@
+{
+    "Actions": [
+        {
+            "UUID": "org.tynsoe.streamdeck.wsproxy.proxy",
+            "Icon": "images/websocket",
+            "Name": "WSProxy",
+            "States": [
+                {
+                    "Image": "images/websocket"
+                }
+            ]
+        }
+    ],
+    "Author": "Yann Bizeul",
+    "CodePath": "plugin/index.html",
+    "Description": "Remote execution of StreamDeck plugin, i.e. node-red",
+    "Name": "WebSocket Proxy",
+    "Icon": "images/websocket",
+    "SDKVersion": 2,
+    "Version": "1.4",
+    "PropertyInspectorPath": "plugin/inspector.html",
+    "OS": [
+        {
+            "Platform": "mac", 
+            "MinimumVersion" : "10.11"
+        },
+        {
+            "Platform": "windows", 
+            "MinimumVersion" : "10"
+        }
+    ],
+    "Software": {
+        "MinimumVersion" : "4.1"
+    }
+}
