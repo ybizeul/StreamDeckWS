@@ -18,7 +18,7 @@ function connect(coordinates,remoteServer,message) {
 	connections[key]=c
 
 	// send willAppear message when connection is ready
-	c.onopen = function() {
+	c.onopen = function(evt) {
 		console.log("Remote socket opened")
 		if (message) {
 			c.send(JSON.stringify(message))
@@ -51,7 +51,7 @@ function disconnect(coordinates,message) {
 		if (c.readyState == 1) {
 			c.send(JSON.stringify(message))
 		}
-		connections.delete(key)
+		delete connections[key]
 		c.close()
 	}
 }
