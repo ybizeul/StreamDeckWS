@@ -63,7 +63,7 @@ Then drag an **Image** node and set the following properties :
 
 ### Format the message back to Stream Deck
 
-Drag a Change node and set `msg.payload` to the following `expression`
+Drag a **Change** node and set `msg.payload` to the following `expression`
 
 ```
 {
@@ -77,7 +77,7 @@ Drag a Change node and set `msg.payload` to the following `expression`
 
 ### Send the message back
 
-Lastly, drag a **websocket out** node and make sure it is configured for the same endpoint and the **websocket in** node.
+Lastly, drag a **websocket out** node and make sure it is configured for the same endpoint as the **websocket in** node.
 
 ### Testing
 
