@@ -1,6 +1,6 @@
 ## About
 
-StreamDeckWS is a WebSocket proxy for Elgato Stream Deck.
+StreamDeckWS is a WebSocket proxy for Corsair Stream Deck.
 
 Now you can send and receive messages for your Stream Deck from remote servers
 like Node-RED websocket plugin.
