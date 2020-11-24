@@ -82,3 +82,23 @@ Lastly, drag a **websocket out** node and make sure it is configured for the sam
 ### Testing
 
 If you're lucky enough, when you push the button you assigned for the StreamDeckWS plugin with the correct URL to Node-RED, you should see an image replace the default icon, and be replaced every time you push it.
+
+You can even go crazy if you'd like...
+
+![nodered5](doc/images/nodered5.png)
+
+### Going further
+
+Now, wouldn't it be cool if the image appeared initially when the key is displayed ?
+
+Just add a **Switch** node parallel to the existing *Key up* node like this :
+
+![nodered6](doc/images/nodered6.png)
+
+This one must match the `willAppear` event :
+
+![nodered7](doc/images/nodered7.png)
+
+Anytime the key becomes visible it will fetch a new image
+
+![video](doc/images/demo.gif)
