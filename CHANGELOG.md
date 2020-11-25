@@ -1,3 +1,6 @@
+# v1.1.4
+- Added URL in manifest and bump version
+
 # v1.1.3
 - Properly deliver `willAppear` message at startup to every key
 
