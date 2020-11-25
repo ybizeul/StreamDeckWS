@@ -12,12 +12,13 @@
         }
     ],
     "Author": "Yann Bizeul",
+    "URL": "https://github.com/ybizeul/StreamDeckWS",
     "CodePath": "plugin/index.html",
     "Description": "Remote execution of StreamDeck plugin, i.e. node-red",
     "Name": "WebSocket Proxy",
     "Icon": "images/websocket",
     "SDKVersion": 2,
-    "Version": "1.1.3",
+    "Version": "1.1.4",
     "PropertyInspectorPath": "plugin/inspector.html",
     "OS": [
         {
