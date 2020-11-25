@@ -101,4 +101,16 @@ This one must match the `willAppear` event :
 
 Anytime the key becomes visible it will fetch a new image
 
-![video](doc/images/demo.gif)
+![GIF](doc/images/demo.gif)
+
+Eventually it is all going to be clean and tidy !
+
+## Wrapping up
+
+With this module, you can extend Stream Deck with infinite possibillities, imagination is the limit ! 
+
+Eventually your flows are gonna be clean and tidy like mine !
+
+![nodered8](doc/images/nodered8.png)
+
+Please share all the great things you are doing with Stream Deck SD !
