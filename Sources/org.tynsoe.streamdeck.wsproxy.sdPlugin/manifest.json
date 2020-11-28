@@ -9,6 +9,19 @@
                     "Image": "images/websocket"
                 }
             ]
+        },
+        {
+            "UUID": "org.tynsoe.streamdeck.wsproxy.proxy-ms",
+            "Icon": "images/websocket",
+            "Name": "WSProxy Multistate",
+            "States": [
+                {
+                    "Image": "images/websocket"
+                },
+                {
+                    "Image": "images/websocket"
+                }
+            ]
         }
     ],
     "Author": "Yann Bizeul",
