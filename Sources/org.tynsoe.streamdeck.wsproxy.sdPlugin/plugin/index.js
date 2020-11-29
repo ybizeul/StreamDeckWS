@@ -64,10 +64,14 @@ call this method with backend_only to true, which creates a new socket without
 changing any of the positions already registered.
 */
 function connect(remoteServer,position,message,backend_only=false) {
+	if (!remoteServer || remoteServer.length == 0)
+		return
 
 	// The connection to this server already exists
 	if (connections.hasOwnProperty(remoteServer) && (backend_only == false)) {
 		addPositionForServer(remoteServer,position)
+		if (!message)
+			return
 
 		// When starting up, all the keys are rapidly sent but the connection is
 		// not available when keys after the very first one are added, so we
@@ -181,6 +185,7 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 		// Received message from Stream Deck
 		console.log(evt)
 		var jsonObj = JSON.parse(evt.data);
+
 		var event = jsonObj['event'];
 	
 		if(event == "didReceiveSettings")
