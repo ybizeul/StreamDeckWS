@@ -1,3 +1,9 @@
+# v1.1.6
+- Filter out "undefined" messages
+
+# v1.1.5
+- Added a "Multistate" action
+
 # v1.1.4
 - Added URL in manifest and bump version
 
