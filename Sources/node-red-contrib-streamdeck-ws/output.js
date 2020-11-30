@@ -4,8 +4,8 @@ module.exports = function(RED) {
         var node = this;
         node.on('input', function(msg) {
             contexts = this.context().flow.get("streamdeckContexts")
-            console.log(contexts)
-            if (!contexts || !contexts[msg.streamdeckID]) {
+
+            if (!contexts || (msg.streamdeckID && !contexts[msg.streamdeckID])) {
                 this.status({fill:"red",shape:"ring",text:"Context is unknown"});
                 return
             }
