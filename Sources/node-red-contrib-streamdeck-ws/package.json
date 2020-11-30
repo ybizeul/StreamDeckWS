@@ -1,6 +1,6 @@
 {
   "name": "@ybizeul/node-red-contrib-streamdeck-ws",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Companion node to work with Stream Deck WS plugin",
   "main": "index.js",
   "scripts": {
