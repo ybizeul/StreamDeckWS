@@ -106,6 +106,7 @@ module.exports = function(RED) {
                 this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
             }
 
+            // Title
             if (config["title"]) {
                 msg.payload.event = "setTitle"
 
@@ -137,6 +138,8 @@ module.exports = function(RED) {
                     console.log(err)
                 }
             }
+
+            // Image
             else if (config["image"]) {
                 msg.payload.event = "setImage"
 
@@ -158,7 +161,7 @@ module.exports = function(RED) {
                     v = config["image"]
                 }
                 if (typeof(v) === "string") {
-                    msg.payload.payload.title=v
+                    msg.payload.payload.image=v
                     this.status({fill:"green",shape:"dot",text:"Set Image"});
                 }
                 else {
