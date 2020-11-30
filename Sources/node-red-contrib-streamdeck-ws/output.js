@@ -16,6 +16,10 @@ module.exports = function(RED) {
                 msg.payload.context = fcontext.streamdeckContexts[config["streamdeckID"]]
             }
             else {
+                if (!fcontext.hasOwnProperty("streamdeckContexts") || !fcontext.streamdeckContexts.hasOwnProperty(msg.streamdeckID)) {
+                    this.status({fill:"red",shape:"ring",text:"Context is unknown"});
+                    return
+                }
                 msg.payload.context = fcontext.streamdeckContexts[msg.streamdeckID]
             }
 
