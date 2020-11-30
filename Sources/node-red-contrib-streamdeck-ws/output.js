@@ -3,7 +3,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.on('input', function(msg) {
-            fcontext = this.context().flow
+            contexts = this.context().flow.get("streamdeckContexts")
 
             // Payload
             if (typeof(msg.payload) != "object") {
@@ -12,23 +12,33 @@ module.exports = function(RED) {
             if (!msg.payload.hasOwnProperty("payload") || typeof(msg.payload.payload) != "object") {
                 msg.payload.payload={}
             }
-            if (config["streamdeckID"]) {
-                msg.payload.context = fcontext.streamdeckContexts[config["streamdeckID"]]
+            
+            // Set context in event
+            if (!contexts) {
+                this.status({fill:"red",shape:"ring",text:"Context cache is empty"});
+                console.log("Context cache is empty")
+                return
             }
-            else {
-                contexts = this.context().flow.get("streamdeckContexts")
-                if (!contexts) {
-                    contexts = {}
-                }
-                if (!contexts[msg.streamdeckID]) {
-                    this.status({fill:"red",shape:"ring",text:"Context is unknown"});
+
+            if (config["streamdeckID"]) {
+                if (!contexts[config["streamdeckID"]]) {
+                    err="Context for '" + config["streamdeckID"] + "' is unknown"
+                    this.status({fill:"red",shape:"ring",text:err});
+                    console.log(err)
                     return
                 }
-                msg.payload.context = fcontext.streamdeckContexts[msg.streamdeckID]
+                msg.payload.context = contexts[config["streamdeckID"]]
+            }
+            else {
+                if (!msg.streamdeckID) {
+                    err="Message has no streamdeckID"
+                    this.status({fill:"red",shape:"ring",text:err});
+                    console.log(err)
+                }
+                msg.payload.context = contexts[msg.streamdeckID]
             }
 
             // State
-
             if (!(config["title"] || config["image"])) {
                 msg.payload.event = "setState"
             }
@@ -61,8 +71,10 @@ module.exports = function(RED) {
                 else {
                     v=Number(v)
                     if (isNaN(v)){
-                        this.status({fill:"red",shape:"ring",text:"Cannot convert state to number"});
-                        console.log("Cannot convert state to number")
+                        err="Cannot convert state '"+ v +"' to number"
+                        this.status({fill:"red",shape:"ring",text:err});
+                        console.log(err)
+                        return
                     }
                     else {
                         if (v === 0) {
@@ -73,6 +85,7 @@ module.exports = function(RED) {
                         }
                     }
                 }
+                this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
             }
             else if (typeof(v) == "number") {
                 if (v === 0) {
@@ -81,6 +94,7 @@ module.exports = function(RED) {
                 else {
                     msg.payload.payload.state=1
                 }
+                this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
             }
             else if (typeof(v) == "boolean") {
                 if (v === true) {
@@ -89,6 +103,7 @@ module.exports = function(RED) {
                 else {
                     msg.payload.payload.state=0
                 }
+                this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
             }
 
             if (config["title"]) {
@@ -114,11 +129,12 @@ module.exports = function(RED) {
                 
                 if (typeof(v) === "string") {
                     msg.payload.payload.title=v
-                    this.status({fill:"green",shape:"dot",text:"Set Title"});
+                    this.status({fill:"green",shape:"dot",text:"Set Title '" + v + "'"});
                 }
                 else {
-                    this.status({fill:"red",shape:"ring",text:"title must be a string"});
-                    console.log("title must be a string")
+                    err="Title must be a string"
+                    this.status({fill:"red",shape:"ring",text:err});
+                    console.log(err)
                 }
             }
             else if (config["image"]) {
@@ -146,8 +162,9 @@ module.exports = function(RED) {
                     this.status({fill:"green",shape:"dot",text:"Set Image"});
                 }
                 else {
-                    this.status({fill:"red",shape:"ring",text:"image must be a base64 string"});
-                    console.log("image must be a base64 string")
+                    err="Image must be a base64 string"
+                    this.status({fill:"red",shape:"ring",text:err});
+                    console.log(err)
                 }                
             }
            node.send(msg);
