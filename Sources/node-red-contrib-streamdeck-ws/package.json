@@ -1,5 +1,5 @@
 {
-  "name": "node-red-contrib-streamdeck-ws",
+  "name": "@ybizeul/node-red-contrib-streamdeck-ws",
   "version": "0.9.0",
   "description": "Companion node to work with Stream Deck WS plugin",
   "main": "index.js",
@@ -20,10 +20,10 @@
     "url": "https://github.com/ybizeul/StreamDeckWS/issues"
   },
   "homepage": "https://github.com/ybizeul/StreamDeckWS#readme",
-  "node-red" : {
+  "node-red": {
     "nodes": {
-        "sd-input": "input.js",
-        "sd-output": "output.js"
+      "sd-input": "input.js",
+      "sd-output": "output.js"
     }
   }
 }
