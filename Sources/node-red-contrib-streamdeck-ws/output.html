@@ -1,0 +1,71 @@
+<script type="text/javascript">
+    RED.nodes.registerType('sd-output',{
+        category: 'network',
+        color: '#20AEC2',
+        defaults: {
+            name: {value:"Stream Deck"},
+            streamdeckID:{value:""},
+            title: {value:""},
+            "title-type": {value:"str"},
+            image: {value:""},
+            "image-type": {value:"str"},
+            state: {value:""},
+            "state-type": {value:"msg"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "sd_out.svg",
+        label: function() {
+            return this.name||"Stream Deck";
+        },
+        oneditprepare: function() {
+            $("#node-input-title").typedInput({
+                type:"str",
+                types:["str","num","bool","msg", "flow","global"],
+                typeField: "#node-input-title-type"
+            })
+            $("#node-image-state").typedInput({
+                type:"str",
+                types:["str","msg", "flow", "global"],
+                typeField: "#node-input-image-type"
+            })
+            $("#node-input-state").typedInput({
+                type:"str",
+                types:["str","num","bool","msg", "flow","global"],
+                typeField: "#node-input-state-type"
+            })
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="sd-output">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-streamdeckID"><i class="fa fa-tag"></i> ID</label>
+        <input type="text" id="node-input-streamdeckID" placeholder="id">
+        <input type="hidden" id="node-input-streamdeckID-type">
+    </div>
+    <div class="form-row">
+        <label for="node-input-title"><i class="fa fa-tag"></i> Title</label>
+        <input type="text" id="node-input-title" placeholder="Title">
+        <input type="hidden" id="node-input-title-type">
+    </div>
+    <div class="form-row">
+        <label for="node-input-image"><i class="fa fa-tag"></i> Image</label>
+        <input type="text" id="node-input-image" placeholder="Base64">
+        <input type="hidden" id="node-input-image-type">
+    </div>
+    <div class="form-row">
+        <label for="node-input-state"><i class="fa fa-tag"></i> State</label>
+        <input type="text" id="node-input-state" placeholder="State">
+        <input type="hidden" id="node-input-state-type">
+    </div>
+    
+</script>
+
+<script type="text/html" data-help-name="sd-output">
+    <p>Output node for your Stream Deck WS message back</p>
+</script>

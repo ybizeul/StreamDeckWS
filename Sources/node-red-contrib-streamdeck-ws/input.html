@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    RED.nodes.registerType('sd-input',{
+        category: 'network',
+        color: '#20AEC2',
+        defaults: {
+            name: {value:"Stream Deck In"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "sd_in.svg",
+        label: function() {
+            return this.name||"Stream Deck";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="sd-input">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="input">
+    <p>Input node for your Stream Deck WS entry point</p>
+</script>
