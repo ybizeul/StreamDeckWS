@@ -68,4 +68,24 @@
 
 <script type="text/html" data-help-name="sd-output">
     <p>Output node for your Stream Deck WS message back</p>
+    <h3>Input</h3>
+    <p>A <code>msg</code> object. If its <code>payload</code> is not
+    an object, it will be overwritten with <code>{ payload: { } }</code>.
+    </p>
+    <p>
+        If <code>msg.payload</code> doesn't have a <code>payload</code> object,
+        it will be created according to the node configuration.
+    </p>
+
+    <h3>Output</h3>
+    <p>
+        A formatted event sent to the Stream Deck by the following `websocket out` node.
+    </p>
+    <p>
+        If the configuration specifies only <b>State</b>, then a <b>SetState</b> event is sent.
+    </p>
+    <p>
+        If <b>State</b> is configured as well as <b>Title</b> or <b>Image</b> then the
+        configured <b>State</b> will be set in <code>payload.state</code> in the event
+    </p>
 </script>

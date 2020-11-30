@@ -21,6 +21,22 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="input">
+<script type="text/html" data-help-name="sd-input">
     <p>Input node for your Stream Deck WS entry point</p>
+    <h3>Input</h3>
+    <p>The output of a <code>websocket in</code> node</p>
+
+    <h3>Output</h3>
+    <p><code>msg.streamdeckID</code> : The `id` property defined in Stream Deck properties</p>
+    <p><code>msg.payload</code> : A JSON object representing the payload</p>
+
+    <h3>Details</h3>
+    <p>
+        This node also registers contexts for the different keys sending events
+        so you do not have to do it your self.
+    </p>
+    <p>
+        If you need to access the context of a particular event, you can still
+        get it from the payload, or in the flow context object <code>flow.streamdeckContexts</code>
+    </p>
 </script>
