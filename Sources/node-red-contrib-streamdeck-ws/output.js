@@ -3,7 +3,12 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.on('input', function(msg) {
-            fcontext = this.context().flow
+            
+            contexts = this.context().flow.get("streamdeckContexts")
+            if (!contexts || !contexts[msg.streamdeckID]) {
+                this.status({fill:"red",shape:"ring",text:"Context is unknown"});
+                return
+            }
 
             // Payload
             if (typeof(msg.payload) != "object") {
@@ -13,17 +18,14 @@ module.exports = function(RED) {
                 msg.payload.payload={}
             }
             if (config["streamdeckID"]) {
-                msg.payload.context = fcontext.streamdeckContexts[config["streamdeckID"]]
-            }
-            else {
-                contexts = this.context().flow.get("streamdeckContexts")
-                if (!contexts) {
-                    contexts = {}
-                }
                 if (!contexts[msg.streamdeckID]) {
                     this.status({fill:"red",shape:"ring",text:"Context is unknown"});
                     return
                 }
+                msg.payload.context = contexts[config["streamdeckID"]]
+            }
+            else {
+
                 msg.payload.context = contexts[msg.streamdeckID]
             }
 
