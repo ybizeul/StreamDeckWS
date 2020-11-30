@@ -24,7 +24,7 @@ module.exports = function(RED) {
                     this.status({fill:"red",shape:"ring",text:"Context is unknown"});
                     return
                 }
-                msg.payload.context = fcontext.streamdeckContexts[msg.streamdeckID]
+                msg.payload.context = contexts[msg.streamdeckID]
             }
 
             // State
