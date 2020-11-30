@@ -113,4 +113,4 @@ Eventually your flows are gonna be clean and tidy like mine !
 
 ![nodered8](doc/images/nodered8.png)
 
-Please share all the great things you are doing with Stream Deck SD !
+Please share all the great things you are doing with Stream Deck WS !
