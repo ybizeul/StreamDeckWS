@@ -4,11 +4,12 @@ module.exports = function(RED) {
         var node = this;
         node.on('input', function(msg) {
             msg.payload=JSON.parse(msg.payload)
-            fcontext = this.context().flow
-            if (! fcontext.hasOwnProperty("streamdeckContexts")) {
-                fcontext.streamdeckContexts = {}
+            contexts = this.context().flow.get("streamdeckContexts")
+            if (!contexts) {
+                contexts = {}
             }
-            fcontext.streamdeckContexts[msg.payload.payload.settings.id]=msg.payload.context
+            contexts[msg.payload.payload.settings.id]=msg.payload.context
+            this.context().flow.set("streamdeckContexts",contexts)
             msg.streamdeckID = msg.payload.payload.settings.id
             node.send(msg);
         });
