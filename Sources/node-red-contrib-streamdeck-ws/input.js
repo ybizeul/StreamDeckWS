@@ -8,9 +8,16 @@ module.exports = function(RED) {
             if (!contexts) {
                 contexts = {}
             }
-            contexts[msg.payload.payload.settings.id]=msg.payload.context
+            sd_id=msg.payload.payload.settings.id
+            if (! sd_id) {
+                sd_id = "__STREAMDECK_KEY__" 
+                    + msg.payload.payload.coordinates.column
+                    + "_"
+                    + msg.payload.payload.coordinates.row
+            }
+            contexts[sd_id]=msg.payload.context
             this.context().flow.set("streamdeckContexts",contexts)
-            msg.streamdeckID = msg.payload.payload.settings.id
+            msg.streamdeckID = sd_id
             node.send(msg);
         });
     }
