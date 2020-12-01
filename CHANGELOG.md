@@ -1,3 +1,6 @@
+# v1.1.7
+- Properly release unused connections
+
 # v1.1.6
 - Filter out "undefined" messages
 
