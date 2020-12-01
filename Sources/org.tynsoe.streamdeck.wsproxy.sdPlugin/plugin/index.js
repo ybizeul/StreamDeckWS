@@ -72,7 +72,6 @@ function connect(remoteServer,position,message,backend_only=false) {
 		if (s === remoteServer) {
 			continue
 		}
-		console.log("test " + s + " " + remoteServer)
 		disconnect(s,position)
 	}
 
