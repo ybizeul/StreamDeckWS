@@ -67,6 +67,15 @@ function connect(remoteServer,position,message,backend_only=false) {
 	if (!remoteServer || remoteServer.length == 0)
 		return
 
+	// Make sure that key is disconnected from other connections
+	for (var s in connections) {
+		if (s === remoteServer) {
+			continue
+		}
+		console.log("test " + s + " " + remoteServer)
+		disconnect(s,position)
+	}
+
 	// The connection to this server already exists
 	if (connections.hasOwnProperty(remoteServer) && (backend_only == false)) {
 		addPositionForServer(remoteServer,position)
@@ -141,7 +150,7 @@ positions listed for it.
 We also send the message if the socket is available, usually the
 `willDisappear` message.
 */
-function disconnect(remoteServer,position,message) {
+function disconnect(remoteServer,position,message=null) {
 	if (connections.hasOwnProperty(remoteServer)) {
 		c=connections[remoteServer].websocket;
 		if (c.readyState == 1 && message) {
