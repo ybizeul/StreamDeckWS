@@ -138,6 +138,18 @@ function connect(remoteServer,position,message,backend_only=false) {
 	}
 }
 
+var oneEventConnections = []
+function sendOneEvent(remoteServer,message) {
+	var c = new WebSocket(remoteServer)
+	oneEventConnections.push(c)
+	c.onopen = function(evt) {
+		console.log("Remote multi-action socket opened")
+		c.send(JSON.stringify(message))
+		c.close()
+		delete oneEventConnections[c]
+	}
+}
+
 /*
 Disconnects a websocket
 
@@ -195,10 +207,16 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 		var jsonObj = JSON.parse(evt.data);
 
 		var event = jsonObj['event'];
-	
+
+		var jsonPayload = jsonObj['payload'];
+		var isInMultiAction = null
+		
+		if (jsonPayload && jsonPayload.hasOwnProperty("isInMultiAction") && jsonPayload['isInMultiAction']) {
+			isInMultiAction = jsonPayload['isInMultiAction']
+		}
+
 		if(event == "didReceiveSettings")
 		{
-			var jsonPayload = jsonObj['payload'];
 			var settings = jsonPayload['settings'];
 			var coordinates = jsonPayload['coordinates'];
 
@@ -210,11 +228,18 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 		*/
 		else if(event == "willAppear")
 		{
-			var jsonPayload = jsonObj['payload'];
 			var settings = jsonPayload['settings'];
 			var coordinates = jsonPayload['coordinates'];
+
 			if (settings.hasOwnProperty("remoteServer")) {
-				connect(settings.remoteServer,positionFromCoordinates(coordinates),jsonObj)
+			// Multiactions are treated as one-offs and have short lived dedicated
+			// connections
+				if (isInMultiAction) {
+					sendOneEvent(settings.remoteServer,jsonObj)
+				}
+				else {
+					connect(settings.remoteServer,positionFromCoordinates(coordinates),jsonObj)
+				}
 			}
 		}
 		/*
@@ -223,11 +248,14 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 		*/
 		else if(event == "willDisappear")
 		{
-			var jsonPayload = jsonObj['payload'];
 			var settings = jsonPayload['settings'];
 			var coordinates = jsonPayload['coordinates'];
-
-			disconnect(settings.remoteServer,positionFromCoordinates(coordinates),jsonObj)
+			if (isInMultiAction) {
+				sendOneEvent(settings.remoteServer,jsonObj)
+			}
+			else {
+				disconnect(settings.remoteServer,positionFromCoordinates(coordinates),jsonObj)
+			}
 		}
 		/*
 		Every other message is simply forwarded to node-red, the condition is
@@ -237,11 +265,16 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 		else if (jsonObj.hasOwnProperty("payload")) {
 			if (jsonObj['payload'].hasOwnProperty("settings")) {
 				key = jsonObj['payload']['settings']['remoteServer']
-				if (connections.hasOwnProperty(key)) {
-					c=connections[key].websocket
-					if (c && c.readyState == 1) {
-						console.log(jsonObj)
-						c.send(JSON.stringify(jsonObj))
+				if (isInMultiAction) {
+					sendOneEvent(key,jsonObj)
+				}
+				else {
+					if (connections.hasOwnProperty(key)) {
+						c=connections[key].websocket
+						if (c && c.readyState == 1) {
+							console.log(jsonObj)
+							c.send(JSON.stringify(jsonObj))
+						}
 					}
 				}
 			}

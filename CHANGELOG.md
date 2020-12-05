@@ -1,3 +1,6 @@
+# v1.1.8
+- You can now use SD WebSocket in multi-actions
+
 # v1.1.7
 - Properly release unused connections
 
