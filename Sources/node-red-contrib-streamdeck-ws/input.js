@@ -18,6 +18,7 @@ module.exports = function(RED) {
             contexts[sd_id]=msg.payload.context
             this.context().flow.set("streamdeckContexts",contexts)
             msg.streamdeckID = sd_id
+            msg.event = msg.payload.event
             node.send(msg);
         });
     }
