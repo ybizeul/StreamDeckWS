@@ -4,13 +4,13 @@ module.exports = function(RED) {
         var node = this;
         node.on('input', function(msg) {
             contexts = this.context().flow.get("streamdeckContexts")
-
+	        msg_payload=msg.payload
             // Payload
-            if (typeof(msg.payload) != "object") {
-                msg.payload={}
+            if (typeof(msg_payload) != "object") {
+                msg_payload={}
             }
-            if (!msg.payload.hasOwnProperty("payload") || typeof(msg.payload.payload) != "object") {
-                msg.payload.payload={}
+            if (!msg_payload.hasOwnProperty("payload") || typeof(msg_payload.payload) != "object") {
+                msg_payload.payload={}
             }
             
             // Set context in event
@@ -27,20 +27,20 @@ module.exports = function(RED) {
                     console.log(err)
                     return
                 }
-                msg.payload.context = contexts[config["streamdeckID"]]
+                msg_payload.context = contexts[config["streamdeckID"]]
             }
             else {
-                if (!msg.streamdeckID) {
+                if (!msg_payload.streamdeckID) {
                     err="Message has no streamdeckID"
                     this.status({fill:"red",shape:"ring",text:err});
                     console.log(err)
                 }
-                msg.payload.context = contexts[msg.streamdeckID]
+                msg_payload.context = contexts[msg.streamdeckID]
             }
 
             // State
             if (!(config["title"] || config["image"])) {
-                msg.payload.event = "setState"
+                msg_payload.event = "setState"
             }
 
             var t = null
@@ -63,10 +63,10 @@ module.exports = function(RED) {
 
             if (typeof(v) == "string") {
                 if (v === "on") {
-                    msg.payload.payload.state = 1
+                    msg_payload.payload.state = 1
                 }
                 else if (v === "off") {
-                    msg.payload.payload.state = 0
+                    msg_payload.payload.state = 0
                 }
                 else {
                     v=Number(v)
@@ -78,37 +78,37 @@ module.exports = function(RED) {
                     }
                     else {
                         if (v === 0) {
-                            msg.payload.payload.state = 0
+                            msg_payload.payload.state = 0
                         }
                         else {
-                            msg.payload.payload.state = 1
+                            msg_payload.payload.state = 1
                         }
                     }
                 }
-                this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
+                this.status({fill:"green",shape:"dot",text:"Set State " + msg_payload.payload.state});
             }
             else if (typeof(v) == "number") {
                 if (v === 0) {
-                    msg.payload.payload.state=0
+                    msg_payload.payload.state=0
                 }
                 else {
-                    msg.payload.payload.state=1
+                    msg_payload.payload.state=1
                 }
-                this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
+                this.status({fill:"green",shape:"dot",text:"Set State " + msg_payload.payload.state});
             }
             else if (typeof(v) == "boolean") {
                 if (v === true) {
-                    msg.payload.payload.state=1
+                    msg_payload.payload.state=1
                 }
                 else {
-                    msg.payload.payload.state=0
+                    msg_payload.payload.state=0
                 }
-                this.status({fill:"green",shape:"dot",text:"Set State " + msg.payload.payload.state});
+                this.status({fill:"green",shape:"dot",text:"Set State " + msg_payload.payload.state});
             }
 
             // Title
             if (config["title"]) {
-                msg.payload.event = "setTitle"
+                msg_payload.event = "setTitle"
 
                 var t = null
                 if (config["title-type"] == "msg") {
@@ -129,19 +129,20 @@ module.exports = function(RED) {
                 }
                 
                 if (typeof(v) === "string") {
-                    msg.payload.payload.title=v
+                    msg_payload.payload.title=v
                     this.status({fill:"green",shape:"dot",text:"Set Title '" + v + "'"});
                 }
                 else {
-                    err="Title must be a string"
+                    err=`Title must be a string, not a ${typeof(v)}`
                     this.status({fill:"red",shape:"ring",text:err});
                     console.log(err)
+		            node.warn(v)
                 }
             }
 
             // Image
             else if (config["image"]) {
-                msg.payload.event = "setImage"
+                msg_payload.event = "setImage"
 
                 var t = null
                 if (config["image-type"] == "msg") {
@@ -161,7 +162,7 @@ module.exports = function(RED) {
                     v = config["image"]
                 }
                 if (typeof(v) === "string") {
-                    msg.payload.payload.image=v
+                    msg_payload.payload.image=v
                     this.status({fill:"green",shape:"dot",text:"Set Image"});
                 }
                 else {
@@ -170,6 +171,7 @@ module.exports = function(RED) {
                     console.log(err)
                 }                
             }
+           msg.payload=msg_payload
            node.send(msg);
         });
     }
