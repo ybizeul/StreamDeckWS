@@ -116,7 +116,7 @@ function connect(remoteServer,position,message,backend_only=false) {
 	c.onopen = function(evt) {
 		console.log("Remote socket opened")
 		if (message) {
-			c.send(JSON.stringify(message))
+			connections[remoteServer].websocket.send(JSON.stringify(message))
 		}
 	}
 
