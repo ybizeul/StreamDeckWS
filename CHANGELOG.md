@@ -1,3 +1,6 @@
+# v1.1.9
+- Fix a bug causing incorrect connection mapping when using multiple websockets (Thanks to @vogtadi)
+
 # v1.1.8
 - You can now use SD WebSocket in multi-actions
 
