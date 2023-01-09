@@ -8,7 +8,14 @@
                 {
                     "Image": "images/websocket"
                 }
-            ]
+            ],
+            "Controllers": [
+                "Keypad",
+                "Encoder"
+            ],
+            "Encoder": {
+                "layout": "$B1"
+            }
         },
         {
             "UUID": "org.tynsoe.streamdeck.wsproxy.proxy-ms",
@@ -31,7 +38,7 @@
     "Name": "WebSocket Proxy",
     "Icon": "images/websocket",
     "SDKVersion": 2,
-    "Version": "1.1.9",
+    "Version": "1.2.0",
     "PropertyInspectorPath": "plugin/inspector.html",
     "OS": [
         {
