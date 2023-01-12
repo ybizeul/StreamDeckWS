@@ -4,7 +4,7 @@ module.exports = function(RED) {
         var node = this;
         node.on('input', function(msg) {
             msg.payload=JSON.parse(msg.payload)
-            contexts = this.context().flow.get("streamdeckContexts")
+            contexts = this.context().global.get("streamdeckContexts")
             if (!contexts) {
                 contexts = {}
             }
@@ -16,7 +16,7 @@ module.exports = function(RED) {
                     + msg.payload.payload.coordinates.row
             }
             contexts[sd_id]=msg.payload.context
-            this.context().flow.set("streamdeckContexts",contexts)
+            this.context().global.set("streamdeckContexts",contexts)
             msg.streamdeckID = sd_id
             msg.event = msg.payload.event
             node.send(msg);

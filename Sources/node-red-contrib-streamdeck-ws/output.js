@@ -3,7 +3,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.on('input', function(msg) {
-            contexts = this.context().flow.get("streamdeckContexts")
+            contexts = this.context().global.get("streamdeckContexts")
 	        msg_payload=msg.payload
             // Payload
             if (typeof(msg_payload) != "object") {
