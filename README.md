@@ -10,7 +10,7 @@ be able to build messages to change button title, image, etc.
 
 ## Configuration
 
-Simply put the address of the remote server as `ws://remote_server`. For Node-RED, it will likely be something like `ws://192.168.10.100:1880/sd-demo` or whatever websocket path you defined.
+Simply put the address of the remote server as `ws://remote_server` (or `wss://remote_server` if you are using HTTPS/SSL). For Node-RED, it will likely be something like `ws://192.168.10.100:1880/sd-demo` or whatever websocket path you defined.
 
 ![screen1](doc/images/screen1.png)
 
